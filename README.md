@@ -1,4 +1,4 @@
-# How to make double-sided PCBs at home with a Carvera Air
+# How to make double-sided PCBs at home with a Carvera (Air)
 
 This is a super in-progress guide for doing this. There's probably many better ways to do this, this is just what's worked for me.
 
@@ -286,7 +286,7 @@ Unlike FlatCAM, you don't need to mirror anything in MakeraCAM. Just create a ne
 
 Let's open up a new 3-axis project in MakeraCAM.
 
-![Opening MakeraCAM for the drills](./assets/makera_moment.PNG)
+![Opening MakeraCAM](./assets/makera_moment.PNG)
 
 Now, set up your stock. Pick the PCB material and set the XYZ values to anything that fits with your board.
 
@@ -298,6 +298,149 @@ In the layer panel, right click 2D layers and select `Import Graphic > Import PC
 
 Import your front silkscreen layer.
 
+![Imported silkscreen](./assets/imported_silkscreen.PNG)
+
+Any text you have needs to go. I haven't figured out how to make it legible yet but it'll legitimately look like trash.
+
+![Proof board with text](./assets/proof_board_again.jpg)
+
+Just delete it.
+
+![Removed text](./assets/bye_text.PNG)
+
+Now, this part you can only do after experimenting a little bit. The laser is _very_ slightly off from where the mill ends up. This will cause your silkscreen to be off. I still haven't gotten the right offsets, but here's how to apply them.
+
+Right click your silkscreen layer in the layers section of MakeraCAM and click on `Select Graphics`.
+
+![Selecting graphics](./assets/select_drills.PNG)
+
+Now, click on the transform menu and select `Move`.
+
+![Selecting move](./assets/transform_move.PNG)
+
+You will be brought to a delightful panel for moving shit. It'll tell you your current selection's location:
+
+![Move panel](./assets/move_panel.PNG)
+
+Now, my last proof board turned out like this:
+
+![Fucked up proof board](./assets/proof_board.jpg)
+
+It looks like on the X axis we are too far to the right (so, we need to compensate by subtracting) and on the Y axis we are too far to the bottom (so we need to compensate by adding).
+
+I'm gonna try -0.75mm on the X axis and +0.3mm on the Y axis.
+
+Based on the values in the move panel:
+
+- X axis
+  $24.579-0.75=23.829$
+- Y axis
+  $11.161+0.3=11.461$
+
+Let's type that into MakeraCAM.
+
+![Moved laser](./assets/moved_laser.PNG)
+
+Great, with our paths translated we're ready to create our laser toolpaths.
+
+Now, this is very important, **select things by their thickness**. Group things as thick as each other together. This way, you can get a result that doesn't look like shit.
+
+In my case, there's only a few tiny bits that have the same thickness. Let's select everything else for now.
+
+![Selected things](./assets/unselected.PNG)
+
+From the laser toolpaths dropdown, select Laser Vector.
+
+![Laser vector](./assets/laser_vector.PNG)
+
+As for settings, set speed at a hilariously low 30mm/min and power at 3%. We're not actually trying to engrave or cut anything (you'll see when we actually run the toolpaths), we're exploiting the laser's wavelength to use it to selectively cure the white soldermask. Set the indent distance at _the lowest possible value that still generates a complete toolpath_. Pair that with using the laser in line mode. The thinnest laser path can generate the thickest solder mask, so it's better to err on the cautious side.
+
+![Laser settings](./assets/laser_settings.PNG)
+
+Now, thing by thing generate your thicker paths with the appropriate indent distances. The thicker it is, the higher the indent distance should be.
+
+With all the toolpaths done, you can now export your gcode and stash it for later.
+
+![Laser done](./assets/done_laser.PNG)
+
 ### Generating the gcode for lasering on the back silkscreen.
 
-About the same as the front silkscreen. Remember, don't mirror anything. You don't need to do that in MakeraCAM.
+About the same as the front silkscreen. Remember, don't mirror anything. You don't need to do that in MakeraCAM. Some text may be mirrored once you import. That's deceiving. Ignore it and just delete.
+
+### Generating the gcode for drills and edge cuts.
+
+This will be the last toolpath for our PCB.
+
+Let's open up a new 3-axis project in MakeraCAM.
+
+![Opening MakeraCAM](./assets/makera_moment.PNG)
+
+Now, set up your stock. Pick the PCB material and set the XYZ values to anything that fits with your board.
+
+![Stock selection](./assets/makera_drills_stock.PNG)
+
+In the layer panel, right click 2D layers and select `Import Graphic > Import PCB`.
+
+![Import PCB](./assets/import_drills.PNG)
+
+Import your PTH, NPTH, and edge cut layers.
+
+![Imported drills](./assets/imported_pth_npth_edge.PNG)
+
+For creating drill holes, there are 2 strategies. You can use a 2D Pocket toolpath or a 2D Drill toolpath. The drill toolpath is greatly preferred because it risks your pads less. If you don't have the right sized drills though, you can make do with a pocket and very often your PCB will be okay. We will use both strategies here because it's fun.
+
+Let's start by using plain ol' drills. Right click the layer that has the right sized drills for your bits and click on `Select Graphics`.
+
+![Select graphics](./assets/select_drills.PNG)
+
+Now, select the 2D Drilling toolpath from the 2D toolpaths dropdown.
+
+![Select toolpath](./assets/pth_drillin.PNG)
+
+As for the settings, you want to drill 1.6mm down to ensure you go fully through the board. This will make a delightful hole in your wooden block. That's fine because the bit should survive this blunder. Remember to use a drill that matches your layer drill size.
+
+![Drilling settings](./assets/pth_settings.PNG)
+
+Now, let's do the pleb way of drilling a hole - the 2D pocket toolpath. Select the drills you don't have the proper bits for and select 2D Pocket from the 2D toolpaths dropdown.
+
+![The pleb way to do drills](./assets/pth_pleb_way.PNG)
+
+Select a corn bit smaller than your smallest drill size. Make it mill 1.6mm down to make sure we get all of the board.
+
+![Corn bit](./assets/pth_corn_bit.PNG)
+
+For the strategy, we're doing outside in. I've gotten the best results with that.
+
+![Outside in](./assets/pth_outside_in.PNG)
+
+Almost done with our last toolpath! Let's cut the board out of the stock. Now, edge cuts are sneaky little shits. It doesn't look like it, but there's two of them. Zoom in and delete the smaller one.
+
+![Delete him](./assets/dual_contour.PNG)
+
+Select your edge cut (NOT cuts!) and select the 2D Contour toolpath from the 2D toolpaths dropdown.
+
+![Edge contour](./assets/edge_contour.PNG)
+
+For these, use your _biggest_ corn bit. Otherwise, it'll look like shit. Again, cutting 1.6mm down.
+
+![Big corn bit](./assets/bigass_corn.PNG)
+
+To not end up fucking our board, pick the outside strategy.
+
+![Outside](./assets/outside_cuts.PNG)
+
+Last one, so the board doesnt go flying out of the FR4, add some tabs. Click on custom, make them triangle shaped, and select `Add`.
+
+![Adding tabs](./assets/add_em.PNG)
+
+Now, click roughly in the centre of each edge of the contour.
+
+![Adding tabs, still](./assets/gimme_tabs.PNG)
+
+Sick. Now press `Exit Add` and calculate your toolpath.
+
+![Contour path](./assets/contour_path.PNG)
+
+You can now export your g-code. Since we're using many corn bits, MakeraCAM will complain about tool numbers. Change them up until you're happy with the numbers. Just make each tool have a different one.
+
+With your g-code exported, you're now ready to mill some shit. Let's get to making everything.
