@@ -2,9 +2,46 @@
 
 This is a super in-progress guide for doing this. There's probably many better ways to do this, this is just what's worked for me.
 
-## Materials, Tools, and Software
+## Table of Contents
 
-### Software
+- [How to make double-sided PCBs at home with a Carvera (Air)](#how-to-make-double-sided-pcbs-at-home-with-a-carvera-air)
+  - [Table of Contents](#table-of-contents)
+- [Materials, Tools, and Software](#materials-tools-and-software)
+  - [Software](#software)
+  - [Materials](#materials)
+  - [Tools](#tools)
+- [Preparation](#preparation)
+  - [Making a PCB-friendly wasteboard.](#making-a-pcb-friendly-wasteboard)
+  - [Making sure copper chips aren't fucking with our mill quality.](#making-sure-copper-chips-arent-fucking-with-our-mill-quality)
+- [Going from PCB to Gcode.](#going-from-pcb-to-gcode)
+  - [Creating your PCB in KiCAD](#creating-your-pcb-in-kicad)
+    - [Quick note about text](#quick-note-about-text)
+    - [Board setup](#board-setup)
+    - [Pre-export work](#pre-export-work)
+    - [Actually exporting the damn thing.](#actually-exporting-the-damn-thing)
+  - [Importing your PCB to FlatCAM.](#importing-your-pcb-to-flatcam)
+    - [Aligning your sides](#aligning-your-sides)
+  - [Adding alignment drills.](#adding-alignment-drills)
+  - [Actually making gcode for the align drills.](#actually-making-gcode-for-the-align-drills)
+    - [Generating g-code for the front side of the PCB.](#generating-g-code-for-the-front-side-of-the-pcb)
+  - [Generating g-code for the back side of the PCB.](#generating-g-code-for-the-back-side-of-the-pcb)
+  - [Generating gcode for removing the front solder mask.](#generating-gcode-for-removing-the-front-solder-mask)
+  - [Generating the gcode for removing the back solder mask.](#generating-the-gcode-for-removing-the-back-solder-mask)
+  - [Generating the gcode for lasering on the front silkscreen.](#generating-the-gcode-for-lasering-on-the-front-silkscreen)
+  - [Generating the gcode for lasering on the back silkscreen.](#generating-the-gcode-for-lasering-on-the-back-silkscreen)
+  - [Generating the gcode for drills and edge cuts.](#generating-the-gcode-for-drills-and-edge-cuts)
+- [Milling the board, lasering the board, and other random side quests.](#milling-the-board-lasering-the-board-and-other-random-side-quests)
+  - [Attaching the fixture \& adding the fan.](#attaching-the-fixture--adding-the-fan)
+  - [Attaching the PCB.](#attaching-the-pcb)
+  - [Finding the 0 point and setting up work coordinates.](#finding-the-0-point-and-setting-up-work-coordinates)
+  - [Drilling alignment holes.](#drilling-alignment-holes)
+  - [Front copper isolation.](#front-copper-isolation)
+  - [Front non-copper clearing](#front-non-copper-clearing)
+
+
+# Materials, Tools, and Software
+
+## Software
 
 - KiCAD
 
@@ -16,7 +53,7 @@ This is a super in-progress guide for doing this. There's probably many better w
 
   This guide uses the 8.994 beta version of FlatCAM. There _will_ be differences between other versions, but the workflow should stay roughly the same.
 
-### Materials
+## Materials
 
 - Copper-clad FR4, duh.
 
@@ -28,7 +65,7 @@ This is a super in-progress guide for doing this. There's probably many better w
 
 - Double sided tape.
 
-### Tools
+## Tools
 
 - The Carvera Air.
 
@@ -52,9 +89,9 @@ This is a super in-progress guide for doing this. There's probably many better w
 
 - Drill bits also in other various sizes.
 
-## Preparation
+# Preparation
 
-### Making a PCB-friendly wasteboard.
+## Making a PCB-friendly wasteboard.
 
 The MDF wasteboard on the Carvera isn't super friendly to milling PCBs so we need to make our own thing to which we will attach PCBs. Fortunately enough, I've solved this problem already by making a Carvera friendly thing that can accomodate large-ish PCBs and screws into the bed. It isn't entirely my own creation, it's based on [this guide's](https://hackaday.io/project/202478/instructions) fixture created by [Vedran](https://hackaday.io/vedranMv). I only modified it to hold larger PCBs. You don't need to mill all the holes, it's really only the screwholes that matter. Here's a photo of mine.
 
@@ -64,7 +101,7 @@ I made it out of some random wood my landlord had in her shed. Just make if flat
 
 You can get the [Fusion project here](./projects_and_gcode/fusion/PCB%20fixture%20thing.f3d) or the [STEP file here](./projects_and_gcode/step/PCB%20fixture%20thing.step).
 
-### Making sure copper chips aren't fucking with our mill quality.
+## Making sure copper chips aren't fucking with our mill quality.
 
 When the bit you're using mills it's own chips (or in this case, dust), you get more burrs and more bullshit. To prevent this you can either use a vaccuum attached to your Carvera or a delightful fan.
 
@@ -72,19 +109,19 @@ When the bit you're using mills it's own chips (or in this case, dust), you get 
 
 [RedGT500](https://www.printables.com/@RedGT500_1977691) has already made a great fix to this. A 3D printable fan made out of TPU that's made to go on your spindle. You can even see mine in that photo of the fixture above. You can download it [here](https://www.printables.com/model/1332188-carvera-spindle-fan-beefy-version/files). I've also reuploaded it [here](./projects_and_gcode/step/Spindle%20Fan.step) to protect against link rot.
 
-## Going from PCB to Gcode.
+# Going from PCB to Gcode.
 
-### Creating your PCB in KiCAD
+## Creating your PCB in KiCAD
 
 Teaching you to actually make PCBs is outside the scope of this guide. God knows I know fuck all about making PCBs or CNC. What I do know is how I made my PCB so that it works with this process.
 
 This doesn't affect making your schematic, so I'm gonna skip right over to the PCB editor.
 
-#### Quick note about text
+### Quick note about text
 
 First, if you think any text you make is gonna look fine, you're sorely mistaken. Don't even bother. Hide all the text and make sure it doesn't end up in the final exports.
 
-#### Board setup
+### Board setup
 
 Let's move onto the money shot.
 
@@ -96,7 +133,7 @@ Let's move onto the money shot.
 - Your minimum through-hole should be 0.3mm (or the smallest bit you've got).
 - Your hole to hole clearance should be 0.2-0.25mm.
 
-#### Pre-export work
+### Pre-export work
 
 To make our board show up consistently in the right spot in all of the pieces of software we'll be using, you gotta set a grid & drill/place origin.
 
@@ -118,7 +155,7 @@ That's the drill origin button. Click on that and place it in the same spot as t
 
 You are now ready to export your board.
 
-#### Actually exporting the damn thing.
+### Actually exporting the damn thing.
 
 Click on `File > Fabrication Outputs > Gerbers`.
 
@@ -132,7 +169,7 @@ Now, select the output folder, select your layers, select `Use drill/place file 
 
 You should now have the Gerbers you need to mill your board.
 
-### Importing your PCB to FlatCAM.
+## Importing your PCB to FlatCAM.
 
 Open up FlatCAM and click on `File`. Then hover over `Open` and select `Open Gerber`. **ONLY** import your front and back copper layers. Don't import anything else.
 
@@ -178,7 +215,7 @@ Looks great! Let's press Mirror to get it onto the right side. Things will feel 
 
 This seems wrong because our vias are not aligned. Remember, this is _Flat_ CAM. So what is happening here instead is that we're looking at our boards from the _top_, just like our CNC will. This means that if you physically flip over your soon-to-be board, you will see the same view as you are right now in FlatCAM.
 
-### Adding alignment drills.
+## Adding alignment drills.
 
 We're almost done with the 2-Sided PCB tool. All we need to do now, is make sure that we can somehow reliably align both sides on our CNC's work area. If you've ever done this manually, you'll know that it's basically impossible.
 
@@ -224,7 +261,7 @@ You should now see your alignment drills on the Plot Area.
 
 ![Drills in plot area](./assets/cam_section/align_in_plot.PNG)
 
-### Actually making gcode for the align drills.
+## Actually making gcode for the align drills.
 
 I don't trust FlatCAM with doing these drilling ops. Partly because I'm not super familiar with it and partly because MakeraCAM makes it dead easy. Let's open up a new 3-axis project in MakeraCAM.
 
@@ -310,13 +347,13 @@ Once you do, configure your toolpath. Most, if not all, of the settings will be 
 
 Once you're satisfied, click on the `Generate CNCJob object button`. Verify your toolpath and save your CNC code. Repeat the same steps as for the isolation gcode where we had to remove a newline from there.
 
-### Generating g-code for the back side of the PCB.
+## Generating g-code for the back side of the PCB.
 
 Repeat the steps you did for the front side, just for the back side this time.
 
 We're now officialy done with FlatCAM. We don't need to look at it again (yay!).
 
-### Generating gcode for removing the front solder mask.
+## Generating gcode for removing the front solder mask.
 
 Let's open up a new 3-axis project in MakeraCAM.
 
@@ -377,11 +414,11 @@ When you're done, your Carvera should have toolpaths for all your pads.
 
 Export your gcode and save for later.
 
-### Generating the gcode for removing the back solder mask.
+## Generating the gcode for removing the back solder mask.
 
 Unlike FlatCAM, you don't need to mirror anything in MakeraCAM. Just create a new project and repeat the above process.
 
-### Generating the gcode for lasering on the front silkscreen.
+## Generating the gcode for lasering on the front silkscreen.
 
 Let's open up a new 3-axis project in MakeraCAM.
 
@@ -462,11 +499,11 @@ With all the toolpaths done, you can now export your gcode and stash it for late
 
 ![Laser done](./assets/cam_section/done_laser.PNG)
 
-### Generating the gcode for lasering on the back silkscreen.
+## Generating the gcode for lasering on the back silkscreen.
 
 About the same as the front silkscreen. Remember, don't mirror anything. You don't need to do that in MakeraCAM. Some text may be mirrored once you import. That's deceiving. Ignore it and just delete.
 
-### Generating the gcode for drills and edge cuts.
+## Generating the gcode for drills and edge cuts.
 
 This will be the last toolpath for our PCB.
 
@@ -544,15 +581,15 @@ You can now export your g-code. Since we're using many corn bits, MakeraCAM will
 
 With your g-code exported, you're now ready to mill some shit. Let's get to making everything.
 
-## Milling the board, lasering the board, and other random side quests.
+# Milling the board, lasering the board, and other random side quests.
 
-### Attaching the fixture & adding the fan.
+## Attaching the fixture & adding the fan.
 
 Let's get started by screwing in the fixture and adding the fan. Take anything in the spindle out of the spindle and press fit the fan. After that, reference the photo below to see where the fixture screws in. Use the medium-long screws that come with the Carvera.
 
 ![Fixture and fan](./assets/fixtures_tools/fixture.jpg)
 
-### Attaching the PCB.
+## Attaching the PCB.
 
 Put double sided tape all over the back of the PCB.
 
@@ -565,6 +602,8 @@ Then, stick it on the fixture. Avoid putting any drills around the screws at the
 Feel free to use the roller from the PCB fabrication kit (if you bought it) to ensure the adhesive is nice and squished.
 
 ![Squishing operations](./assets/milling_section/attach_to_fixture_with_roller.jpg)
+
+## Finding the 0 point and setting up work coordinates.
 
 Insert the leveling probe into the spindle.
 
@@ -588,6 +627,8 @@ Find your zero point.
 
 Once you're happy with the zero point, let's start running the alignment hole job.
 
+## Drilling alignment holes.
+
 ![Align job](./assets/milling_section/upload_drills.png)
 
 When you click on start job, you will see a work origin and leveling menu. Your toolhead is at the X and Y zero point right now. Let's let the machine know about that by clicking `Config` under `Set Work Origin` and setting the anchor as `Current Pos`.
@@ -610,6 +651,8 @@ After you've cleared them, put the dowel pins in. From now on, **anytime you're 
 
 ![Pins in](./assets/milling_section/pins_in_holes.jpg)
 
+## Front copper isolation.
+
 Let's move onto the fun stuff. Load up the copper isolation job.
 
 ![Iso job](./assets/milling_section/run_f_iso.png)
@@ -627,6 +670,8 @@ Great! Let's wait for our machine to be done.
 Nice result!
 
 ![Done iso](./assets/milling_section/post_iso.jpg)
+
+## Front non-copper clearing
 
 Let's now move onto milling out the non-copper sections. Load up the NCC job.
 
