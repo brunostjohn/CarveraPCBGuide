@@ -22,13 +22,21 @@ This is a super in-progress guide for doing this. There's probably many better w
 
 - UV-curable solder mask (both in target solder mask colour and white, you'll see why).
 
-- Some random ass wood. (should fit on the Carvera bed)
+- Some random ass wood for milling the PCB fixture. (should fit on the Carvera bed)
+
+- TPU to make a spindle fan
 
 - Double sided tape.
 
 ### Tools
 
 - The Carvera Air.
+
+- 3D printer (optional)
+
+- Shop vac (optional)
+
+- The sanding block that came with the Carvera
 
 - Carvera's Laser Module.
 
@@ -46,9 +54,11 @@ This is a super in-progress guide for doing this. There's probably many better w
 
 ### Making a PCB-friendly wasteboard.
 
-The MDF wasteboard on the Carvera isn't super friendly to milling PCBs we need to make our own thing to which we will attach PCBs. Fortunately enough, I've solved this problem already by making a Carvera friendly thing that can accomodate large-ish PCBs and screws into the bed. It isn't entirely my own creation, it's based on [this guide's](https://hackaday.io/project/202478/instructions) fixture created by [Vedran](https://hackaday.io/vedranMv). I only modified it to hold larger PCBs. You don't need to mill all the holes, it's really only the screwholes that matter. Here's a photo of mine.
+The MDF wasteboard on the Carvera isn't super friendly to milling PCBs so we need to make our own thing to which we will attach PCBs. Fortunately enough, I've solved this problem already by making a Carvera friendly thing that can accomodate large-ish PCBs and screws into the bed. It isn't entirely my own creation, it's based on [this guide's](https://hackaday.io/project/202478/instructions) fixture created by [Vedran](https://hackaday.io/vedranMv). I only modified it to hold larger PCBs. You don't need to mill all the holes, it's really only the screwholes that matter. Here's a photo of mine.
 
 ![Fixture](./assets/fixture.jpg)
+
+I made it out of some random wood my landlord had in her shed. Just make if flat enough and you'll be fine.
 
 You can get the [Fusion project here](./projects_and_gcode/fusion/PCB%20fixture%20thing.f3d) or the [STEP file here](./projects_and_gcode/step/PCB%20fixture%20thing.step).
 
