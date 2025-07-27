@@ -7,33 +7,120 @@ This is a super in-progress guide for doing this. There's probably many better w
 ### Software
 
 - KiCAD
+
 - Makera's CAM
+
 - Fusion 360
+
 - FlatCAM
+
   This guide uses the 8.994 beta version of FlatCAM. There _will_ be differences between other versions, but the workflow should stay roughly the same.
 
 ### Materials
 
 - Copper-clad FR4, duh.
+
 - UV-curable solder mask (both in target solder mask colour and white, you'll see why).
+
 - Some random ass wood. (should fit on the Carvera bed)
+
 - Double sided tape.
 
 ### Tools
 
 - The Carvera Air.
+
 - Carvera's Laser Module.
+
 - A 0.2mm corn bit/endmill.
+
 - A 2mm/4mm drill bit.
+
 - Makera's solder mask removal bit.
+
+- Corn bits in other various sizes.
+
+- Drill bits also in other various sizes.
 
 ## Preparation
 
-## The actual process
+### Making a PCB-friendly wasteboard.
 
-[stuff about exporting PCBs here]
+The MDF wasteboard on the Carvera isn't super friendly to milling PCBs we need to make our own thing to which we will attach PCBs. Fortunately enough, I've solved this problem already by making a Carvera friendly thing that can accomodate large-ish PCBs and screws into the bed. It isn't entirely my own creation, it's based on [this guide's](https://hackaday.io/project/202478/instructions) fixture created by [Vedran](https://hackaday.io/vedranMv). I only modified it to hold larger PCBs. You don't need to mill all the holes, it's really only the screwholes that matter. Here's a photo of mine.
 
-### Import your PCB to FlatCAM
+![Fixture](./assets/fixture.jpg)
+
+You can get the [Fusion project here](./projects_and_gcode/fusion/PCB%20fixture%20thing.f3d) or the [STEP file here](./projects_and_gcode/step/PCB%20fixture%20thing.step).
+
+### Making sure copper chips aren't fucking with our mill quality.
+
+When the bit you're using mills it's own chips (or in this case, dust), you get more burrs and more bullshit. To prevent this you can either use a vaccuum attached to your Carvera or a delightful fan.
+
+![Spindle fan](./assets/carvera-spindle-fan-beefy.webp)
+
+[RedGT500](https://www.printables.com/@RedGT500_1977691) has already made a great fix to this. A 3D printable fan made out of TPU that's made to go on your spindle. You can even see mine in that photo of the fixture above. You can download it [here](https://www.printables.com/model/1332188-carvera-spindle-fan-beefy-version/files). I've also reuploaded it [here](./projects_and_gcode/step/Spindle%20Fan.step) to protect against link rot.
+
+## Going from PCB to Gcode.
+
+### Creating your PCB in KiCAD
+
+Teaching you to actually make PCBs is outside the scope of this guide. God knows I know fuck all about making PCBs or CNC. What I do know is how I made my PCB so that it works with this process.
+
+This doesn't affect making your schematic, so I'm gonna skip right over to the PCB editor.
+
+#### Quick note about text
+
+First, if you think any text you make is gonna look fine, you're sorely mistaken. Don't even bother. Hide all the text and make sure it doesn't end up in the final exports.
+
+#### Board setup
+
+Let's move onto the money shot.
+
+- The minimum clearance between tracks should be 0.2mm (you _can_ set 0.1mm and have good results but you have to mind yourself so you don't get the tracks too close together, this is relevant for some smaller ICs or USB-C ports).
+- The minimum track width should be 0.2mm (NOT any lower unless you have tiny ass bits, which I don't and haven't tested).
+- Your minimum via diameter should be 0.9mm (so that you can drill 0.6mm holes for them). Smaller vias will be a pain in the ass, don't even bother with them.
+- Your copper to hole clearance should be 0.25mm. You can go lower (as low as 0.2mm), but I wouldn't recommend it.
+- Your copper to edge clearance should be 0mm. This way KiCAD won't force FlatCAM to mill the shit out of the boards edges wasting your time and bit life.
+- Your minimum through-hole should be 0.3mm (or the smallest bit you've got).
+- Your hole to hole clearance should be 0.2-0.25mm.
+
+#### Pre-export work
+
+To make our board show up consistently in the right spot in all of the pieces of software we'll be using, you gotta set a grid & drill/place origin.
+
+In KiCAD's PCB editor, select the `Grid Origin` option.
+
+![Grid origin](./assets/grid_origin.png)
+
+Then, place it at the bottom left corner of your board.
+
+![Placed origin](./assets/placed_origin.png)
+
+Now, press and hold the grid origin button until a second option pops out.
+
+![Drill origin button](./assets/drill_origin.png)
+
+That's the drill origin button. Click on that and place it in the same spot as the grid origin.
+
+![Both placed](./assets/both_placed.png)
+
+You are now ready to export your board.
+
+#### Actually exporting the damn thing.
+
+Click on `File > Fabrication Outputs > Gerbers`.
+
+![Export the gerbers on god](./assets/gerbers.png)
+
+Now, select the output folder, select your layers, select `Use drill/place file origin`. First, click on `Generate Drill Files` and also select `Drill Origin > Drill/place file origin`, then click on `Generate Drill File` and close. Then, click on `Plot`. Your board should now have the required outputs to be milled in the folder you selected.
+
+![Select the right options](./assets/kicad_export.png)
+
+(I've taken this photo from [Vedran's guide](https://hackaday.io/project/202478/instructions) because I'm on macOS Tahoe and KiCAD's export window is freaking OUT on it)
+
+You should now have the Gerbers you need to mill your board.
+
+### Importing your PCB to FlatCAM.
 
 Open up FlatCAM and click on `File`. Then hover over `Open` and select `Open Gerber`. **ONLY** import your front and back copper layers. Don't import anything else.
 
@@ -444,3 +531,7 @@ Sick. Now press `Exit Add` and calculate your toolpath.
 You can now export your g-code. Since we're using many corn bits, MakeraCAM will complain about tool numbers. Change them up until you're happy with the numbers. Just make each tool have a different one.
 
 With your g-code exported, you're now ready to mill some shit. Let's get to making everything.
+
+## Milling the board, lasering the board, and other random side quests.
+
+[TO BE DONE]
