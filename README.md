@@ -34,6 +34,8 @@ This is a super in-progress guide for doing this. There's probably many better w
 
 - 3D printer (optional)
 
+- A UV light.
+
 - Shop vac (optional)
 
 - The sanding block that came with the Carvera
