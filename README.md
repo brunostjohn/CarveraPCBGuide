@@ -403,7 +403,9 @@ Export your gcode and save for later.
 
 ## Generating the gcode for removing the back solder mask.
 
-Unlike FlatCAM, you don't need to mirror anything in MakeraCAM. Just create a new project and repeat the above process.
+Take your mirrored back board from FlatCAM and export the Gerber. Import to MakeraCAM and mirror it vertically:
+
+![Mirror vertically](./assets/cam_section/mirror_vertically.PNG)
 
 ## Generating the gcode for lasering on the front silkscreen.
 
@@ -488,7 +490,7 @@ With all the toolpaths done, you can now export your gcode and stash it for late
 
 ## Generating the gcode for lasering on the back silkscreen.
 
-About the same as the front silkscreen. Remember, don't mirror anything. You don't need to do that in MakeraCAM. Some text may be mirrored once you import. That's deceiving. Ignore it and just delete.
+About the same as the front silkscreen. Just with the caveat that you have to mirror it vertically as shown in the previous sections.
 
 ## Generating the gcode for drills and edge cuts.
 
