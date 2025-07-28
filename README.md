@@ -37,6 +37,8 @@ This is a super in-progress guide for doing this. There's probably many better w
   - [Drilling alignment holes.](#drilling-alignment-holes)
   - [Front copper isolation.](#front-copper-isolation)
   - [Front non-copper clearing](#front-non-copper-clearing)
+  - [Back copper isoltion \& NCC.](#back-copper-isoltion--ncc)
+  - [Applying the back solder mask.](#applying-the-back-solder-mask)
 
 
 # Materials, Tools, and Software
@@ -88,6 +90,8 @@ This is a super in-progress guide for doing this. There's probably many better w
 - Corn bits in other various sizes.
 
 - Drill bits also in other various sizes.
+
+- Something to scrape the PCB off the fixture after the double sided tape. I'm using a 3D printer bed scraper.
 
 # Preparation
 
@@ -684,3 +688,58 @@ Now, before you run it, **DO NOT** enable any option that requires the probe. We
 Let's wait for NCC to be done.
 
 ![Waiting for NCC](./assets/milling_section/ncc_wait.png)
+
+## Back copper isoltion & NCC.
+
+With front NCC done, we can scrape the board off our fixture. Add double sided tape _only above and below the board_. If you add tape onto the board, you run the risk of scraping traces.
+
+Just like with the front side, run maximum leveling (15 points) and start the isolation job. Once done, start NCC without using the probe. Once that's done, we're ready to move onto solder mask.
+
+## Applying the back solder mask.
+
+Right now, the board will have a bunch of burrs. We don't want that as it will cause an uneven stick & coat for the UV-curing solder mask. Fortunately, Makera includes a fine enough sanding block with the Carvera.
+
+![Sanding block](./assets/milling_section/sanding_block.jpg)
+
+Rub that shit on the board until it gets nice and shiny.
+
+![Rubbing it on god](./assets/milling_section/shinier_board.jpg)
+
+Now, the sander itself leaves some nasty shit on the board. Grab some isopropanol and swab that shit.
+
+![Swabbing](./assets/milling_section/isopropanol_thing.jpg)
+![Cleaning](./assets/milling_section/cleaning_up.jpg)
+
+As you can see, that is quite nasty.
+
+![Ew](./assets/milling_section/this_shit_dirty.jpg)
+
+Okay, grab your favourite solder mask.
+
+![Solder mask time](./assets/milling_section/solder_mask_time.jpg)
+
+Apply it evenly-ish on the board.
+
+![Solder mask applied](./assets/milling_section/applied_mask.jpg)
+
+Now, grab a transparent sheet. I'm using some random acetate sheets I had at home.
+
+![Sheet](./assets/milling_section/transparent_sheet.jpg)
+
+Squish it on the board.
+
+![Squished](./assets/milling_section/squished.jpg)
+
+Now, use the roller that comes in the PCB fabrication kit (or a credit card) to get the solder mask spread evenly (enough) on the board.
+
+![Rolling](./assets/milling_section/they_see_me_rolling_they_hating.jpg)
+
+Once you're done, you should be left with something that looks kind of like this.
+
+![Rolled and squished](./assets/milling_section/applied_mask.jpg)
+
+Now, grab your favourite UV light, set it to at least 15 minutes, and start curing this thing.
+
+![Curing](./assets/milling_section/curing_that_shit.jpg)
+
+
