@@ -46,11 +46,8 @@ This is a super in-progress guide for doing this. There's probably many better w
 ## Software
 
 - KiCAD
-
 - Makera's CAM
-
 - Fusion 360
-
 - FlatCAM
 
   This guide uses the 8.994 beta version of FlatCAM. There _will_ be differences between other versions, but the workflow should stay roughly the same.
@@ -58,39 +55,25 @@ This is a super in-progress guide for doing this. There's probably many better w
 ## Materials
 
 - Copper-clad FR4, duh.
-
 - UV-curable solder mask (both in target solder mask colour and white, you'll see why).
-
 - Some random ass wood for milling the PCB fixture. (should fit on the Carvera bed)
-
 - TPU to make a spindle fan
-
 - Double sided tape.
+- An acetate sheet.
 
 ## Tools
 
 - The Carvera Air.
-
 - 3D printer (optional)
-
 - A UV light.
-
 - Shop vac (optional)
-
 - The sanding block that came with the Carvera
-
 - Carvera's Laser Module.
-
 - A 0.2mm corn bit/endmill.
-
 - A 2mm/4mm drill bit.
-
 - Makera's solder mask removal bit.
-
 - Corn bits in other various sizes.
-
 - Drill bits also in other various sizes.
-
 - Something to scrape the PCB off the fixture after the double sided tape. I'm using a 3D printer bed scraper.
 
 # Preparation
