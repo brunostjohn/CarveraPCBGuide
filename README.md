@@ -688,7 +688,7 @@ Rub that shit on the board until it gets nice and shiny.
 
 ![Rubbing it on god](./assets/milling_section/shinier_board.jpg)
 
-Now, the sander itself leaves some nasty shit on the board. Grab some isopropanol and swab that shit.
+Now, the sander itself leaves some nasty shit on the board. Grab some isopropanol and swab it off.
 
 ![Swabbing](./assets/milling_section/isopropanol_thing.jpg)
 ![Cleaning](./assets/milling_section/cleaning_up.jpg)
