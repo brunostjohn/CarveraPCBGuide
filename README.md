@@ -719,7 +719,7 @@ Now, use the roller that comes in the PCB fabrication kit (or a credit card) to 
 
 Once you're done, you should be left with something that looks kind of like this.
 
-![Rolled and squished](./assets/milling_section/applied_mask.jpg)
+![Rolled and squished](./assets/milling_section/post_roller.jpg)
 
 Now, grab your favourite UV light, set it to at least 15 minutes, and start curing this thing.
 
